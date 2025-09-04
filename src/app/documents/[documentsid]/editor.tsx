@@ -3,6 +3,10 @@
 import React from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { TaskItem, TaskList } from "@tiptap/extension-list";
+import Image from "@tiptap/extension-image";
+import { TableKit } from "@tiptap/extension-table";
+import ImageResize from "tiptap-extension-resize-image";
 
 const EditorPage = () => {
   const editor = useEditor({
@@ -13,8 +17,19 @@ const EditorPage = () => {
           "focus:outline-none print:border-0 bg-white border border-[#C7C7C7] flex flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor-text",
       },
     },
-    extensions: [StarterKit],
-    content: "<p>Hello World! 🌎️</p>",
+    extensions: [
+      StarterKit,
+      TaskList,
+      TaskItem.configure({
+        nested: true,
+      }),
+      TableKit.configure({
+        table: { resizable: true },
+      }),
+      ImageResize,
+      Image,
+    ],
+    content: `<img src="https://source.unsplash.com/8xznAGy4HcY/800x400" />`,
     // Don't render immediately on the server to avoid SSR issues
     immediatelyRender: false,
   });
