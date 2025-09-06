@@ -88,9 +88,8 @@ body {
 }
 
 .tiptap {
-
   /* Basic image styles */
-   img {
+  img {
     display: block;
     height: auto;
     margin: 1.5rem 0;
@@ -190,8 +189,7 @@ body {
     font-size: 1rem;
   }
 
-
-   /* Table-specific styling */
+  /* Table-specific styling */
   table {
     border-collapse: collapse;
     margin: 0;
@@ -221,7 +219,7 @@ body {
 
     .selectedCell:after {
       background: var(#959596);
-      content: '';
+      content: "";
       left: 0;
       right: 0;
       top: 0;
@@ -250,5 +248,75 @@ body {
   &.resize-cursor {
     cursor: ew-resize;
     cursor: col-resize;
+  }
+
+  /* Intent classes */
+  *[data-indent="1"] {
+    margin-left: 30px !important;
+  }
+
+  *[data-indent="2"] {
+    margin-left: 60px !important;
+  }
+
+  *[data-indent="3"] {
+    margin-left: 90px !important;
+  }
+
+  *[data-indent="4"] {
+    margin-left: 120px !important;
+  }
+
+  *[data-indent="5"] {
+    margin-left: 150px !important;
+  }
+
+  *[data-indent="6"] {
+    margin-left: 180px !important;
+  }
+
+  *[data-indent="7"] {
+    margin-left: 210px !important;
+  }
+
+  /* Optional: Add smooth transitions for better UX */
+  *[data-indent] {
+    transition: margin-left 0.2s ease;
+  }
+
+  /* Optional: Responsive design - smaller indents on mobile */
+  @media (max-width: 768px) {
+    *[data-indent="1"] {
+      margin-left: 20px !important;
+    }
+
+    *[data-indent="2"] {
+      margin-left: 40px !important;
+    }
+
+    *[data-indent="3"] {
+      margin-left: 60px !important;
+    }
+
+    *[data-indent="4"] {
+      margin-left: 80px !important;
+    }
+
+    *[data-indent="5"] {
+      margin-left: 100px !important;
+    }
+
+    *[data-indent="6"] {
+      margin-left: 120px !important;
+    }
+
+    *[data-indent="7"] {
+      margin-left: 140px !important;
+    }
+  }
+
+  /* Font family */
+  html {
+    --title-font-family: "Helvetica", sans-serif;
   }
 }

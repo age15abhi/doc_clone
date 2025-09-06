@@ -4,21 +4,22 @@ import React from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
+import { TextStyle, FontFamily } from "@tiptap/extension-text-style";
 import Image from "@tiptap/extension-image";
 import { TableKit } from "@tiptap/extension-table";
 import ImageResize from "tiptap-extension-resize-image";
 import { useEditorStore } from "@/store/use-editor-store";
+import Indent from "@/extensions/Intent";
 
 const EditorPage = () => {
-  const {  setEditor } = useEditorStore();
-
+  const { setEditor } = useEditorStore();
 
   const editor = useEditor({
     onCreate: ({ editor }) => {
       setEditor(editor);
     },
 
-    onDestroy:()=> {
+    onDestroy: () => {
       setEditor(null);
     },
     onUpdate: ({ editor }) => {
@@ -58,8 +59,12 @@ const EditorPage = () => {
       }),
       ImageResize,
       Image,
+      Indent.configure({
+        types: ["paragraph", "heading", "blockquote"],
+      }),
+      TextStyle,
+      FontFamily,
     ],
-    content: `<img src="https://source.unsplash.com/8xznAGy4HcY/800x400" />`,
     // Don't render immediately on the server to avoid SSR issues
     immediatelyRender: false,
   });
