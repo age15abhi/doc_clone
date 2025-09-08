@@ -15,7 +15,9 @@ async function DocumentsIdPage({ params }: DocumentsIdPageProps) {
   return (
     <div className="min-h-screen bg-[#FAFBFD]">
       {/* ================ TOOLBAR AND EDITOR ================== */}
+
       <Toolbar />
+
       <EditorPage />
       {/* ====================================================== */}
     </div>

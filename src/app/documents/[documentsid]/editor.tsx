@@ -4,7 +4,7 @@ import React from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
-import { TextStyle, FontFamily } from "@tiptap/extension-text-style";
+import { TextStyle, FontFamily, FontSize } from "@tiptap/extension-text-style";
 import Image from "@tiptap/extension-image";
 import { TableKit } from "@tiptap/extension-table";
 import ImageResize from "tiptap-extension-resize-image";
@@ -64,7 +64,15 @@ const EditorPage = () => {
       }),
       TextStyle,
       FontFamily,
+      FontSize
     ],
+     content: `
+        <p>Adjusting font sizes can greatly affect the readability of your text, making it easier for users to engage with your content.</p>
+        <p>When designing a website, it's crucial to balance large headings and smaller body text for a clean, organized layout.</p>
+        <p>When setting font sizes, it's important to consider accessibility, ensuring that text is readable for users with different visual impairments.</p>
+        <p><span style="font-size: 10px">Too small</span> a font size can strain the eyes, while <span style="font-size: 40px">too large</span> can disrupt the flow of the design.</p>
+        <p>When designing for mobile, font sizes should be adjusted to maintain readability on smaller screens.</p>
+      `,
     // Don't render immediately on the server to avoid SSR issues
     immediatelyRender: false,
   });
