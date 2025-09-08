@@ -16,6 +16,7 @@ import {
   DropdownMenu,
   DropdownMenuPortal,
   DropdownMenuTrigger,
+  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 /* ================ Icons ================== */
 import {
@@ -33,12 +34,307 @@ import {
   OutdentIcon,
   PrinterIcon,
   Redo2Icon,
+  SearchIcon,
   SpellCheckIcon,
   UnderlineIcon,
   Undo2Icon,
+  PaintBucketIcon,
+  ALargeSmall,
 } from "lucide-react";
 import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
 
+/* ================ Text color Button ================== */
+const HighlightColorButton = () => {
+  const { editor } = useEditorStore();
+
+  const colors = [
+    { name: "AliceBlue", code: "#F0F8FF" },
+    { name: "AntiqueWhite", code: "#FAEBD7" },
+    { name: "Aqua", code: "#00FFFF" },
+    { name: "Aquamarine", code: "#7FFFD4" },
+    { name: "Azure", code: "#F0FFFF" },
+    { name: "Beige", code: "#F5F5DC" },
+    { name: "Bisque", code: "#FFE4C4" },
+    { name: "Black", code: "#000000" },
+    { name: "BlanchedAlmond", code: "#FFEBCD" },
+    { name: "Blue", code: "#0000FF" },
+    { name: "BlueViolet", code: "#8A2BE2" },
+    { name: "Brown", code: "#A52A2A" },
+    { name: "BurlyWood", code: "#DEB887" },
+    { name: "CadetBlue", code: "#5F9EA0" },
+    { name: "Chartreuse", code: "#7FFF00" },
+    { name: "Chocolate", code: "#D2691E" },
+    { name: "Coral", code: "#FF7F50" },
+    { name: "CornflowerBlue", code: "#6495ED" },
+    { name: "Cornsilk", code: "#FFF8DC" },
+    { name: "Crimson", code: "#DC143C" },
+    { name: "Cyan", code: "#00FFFF" },
+    { name: "DarkBlue", code: "#00008B" },
+    { name: "DarkCyan", code: "#008B8B" },
+    { name: "DarkGoldenRod", code: "#B8860B" },
+    { name: "DarkGray", code: "#A9A9A9" },
+    { name: "DarkGreen", code: "#006400" },
+    { name: "DarkKhaki", code: "#BDB76B" },
+    { name: "DarkMagenta", code: "#8B008B" },
+    { name: "DarkOliveGreen", code: "#556B2F" },
+    { name: "DarkOrange", code: "#FF8C00" },
+    { name: "DarkOrchid", code: "#9932CC" },
+    { name: "DarkRed", code: "#8B0000" },
+    { name: "DarkSalmon", code: "#E9967A" },
+    { name: "DarkSeaGreen", code: "#8FBC8F" },
+    { name: "DarkSlateBlue", code: "#483D8B" },
+    { name: "DarkSlateGray", code: "#2F4F4F" },
+    { name: "DarkTurquoise", code: "#00CED1" },
+    { name: "DarkViolet", code: "#9400D3" },
+    { name: "DeepPink", code: "#FF1493" },
+    { name: "DeepSkyBlue", code: "#00BFFF" },
+    { name: "DimGray", code: "#696969" },
+    { name: "DodgerBlue", code: "#1E90FF" },
+    { name: "FireBrick", code: "#B22222" },
+    { name: "FloralWhite", code: "#FFFAF0" },
+    { name: "ForestGreen", code: "#228B22" },
+    { name: "Fuchsia", code: "#FF00FF" },
+    { name: "Gainsboro", code: "#DCDCDC" },
+    { name: "GhostWhite", code: "#F8F8FF" },
+    { name: "Gold", code: "#FFD700" },
+    { name: "GoldenRod", code: "#DAA520" },
+    { name: "Gray", code: "#808080" },
+    { name: "Green", code: "#008000" },
+    { name: "GreenYellow", code: "#ADFF2F" },
+    { name: "HoneyDew", code: "#F0FFF0" },
+    { name: "HotPink", code: "#FF69B4" },
+    { name: "IndianRed", code: "#CD5C5C" },
+    { name: "Indigo", code: "#4B0082" },
+    { name: "Ivory", code: "#FFFFF0" },
+    { name: "Khaki", code: "#F0E68C" },
+    { name: "Lavender", code: "#E6E6FA" },
+    { name: "LavenderBlush", code: "#FFF0F5" },
+    { name: "LawnGreen", code: "#7CFC00" },
+    { name: "LemonChiffon", code: "#FFFACD" },
+    { name: "LightBlue", code: "#ADD8E6" },
+    { name: "LightCoral", code: "#F08080" },
+    { name: "LightCyan", code: "#E0FFFF" },
+    { name: "LightGoldenRodYellow", code: "#FAFAD2" },
+    { name: "LightGray", code: "#D3D3D3" },
+    { name: "LightGreen", code: "#90EE90" },
+    { name: "LightPink", code: "#FFB6C1" },
+    { name: "LightSalmon", code: "#FFA07A" },
+    { name: "LightSeaGreen", code: "#20B2AA" },
+    { name: "LightSkyBlue", code: "#87CEFA" },
+    { name: "LightSlateGray", code: "#778899" },
+    { name: "LightSteelBlue", code: "#B0C4DE" },
+    { name: "LightYellow", code: "#FFFFE0" },
+    { name: "Lime", code: "#00FF00" },
+    { name: "LimeGreen", code: "#32CD32" },
+    { name: "Linen", code: "#FAF0E6" },
+    { name: "Magenta", code: "#FF00FF" },
+    { name: "Maroon", code: "#800000" },
+    { name: "MediumAquaMarine", code: "#66CDAA" },
+    { name: "MediumBlue", code: "#0000CD" },
+    { name: "MediumOrchid", code: "#BA55D3" },
+    { name: "MediumPurple", code: "#9370DB" },
+    { name: "MediumSeaGreen", code: "#3CB371" },
+    { name: "MediumSlateBlue", code: "#7B68EE" },
+    { name: "MediumSpringGreen", code: "#00FA9A" },
+    { name: "MediumTurquoise", code: "#48D1CC" },
+    { name: "MediumVioletRed", code: "#C71585" },
+    { name: "MidnightBlue", code: "#191970" },
+    { name: "MintCream", code: "#F5FFFA" },
+    { name: "MistyRose", code: "#FFE4E1" },
+    { name: "Moccasin", code: "#FFE4B5" },
+    { name: "NavajoWhite", code: "#FFDEAD" },
+    { name: "Navy", code: "#000080" },
+  ];
+
+  const currentColor =
+    editor?.getAttributes("textStyle").backgroundColor || "black";
+
+  const applyColor = (color: string) => {
+    editor?.chain().focus().setBackgroundColor(color).run();
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={cn(
+            "w-7 min-h-7 flex flex-col items-center justify-center rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100"
+          )}
+        >
+          {/* Icon */}
+          <PaintBucketIcon className="text-black size-4 " />
+
+          {/* Color line below the icon */}
+          <span
+            className="h-1 w-6 rounded-sm"
+            style={{ backgroundColor: currentColor }}
+          />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuPortal>
+        <DropdownMenuContent className="p-6 grid grid-cols-6 gap-3 bg-white shadow-2xl rounded-xl w-80 max-h-64 overflow-auto border border-gray-100">
+          {colors.map((color) => (
+            <DropdownMenuItem
+              key={color.name}
+              onClick={() => applyColor(color.code)}
+              className="flex items-center justify-center w-7 h-7 rounded-full border border-gray-200 cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-110 hover:ring-2 hover:ring-offset-2 hover:ring-blue-500 hover:shadow-md"
+              style={{ backgroundColor: color.code }}
+              title={color.name}
+            />
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenuPortal>
+    </DropdownMenu>
+  );
+};
+
+/* ================ Text color Button ================== */
+const TextColorButton = () => {
+  const { editor } = useEditorStore();
+
+  const colors = [
+    { name: "AliceBlue", code: "#F0F8FF" },
+    { name: "AntiqueWhite", code: "#FAEBD7" },
+    { name: "Aqua", code: "#00FFFF" },
+    { name: "Aquamarine", code: "#7FFFD4" },
+    { name: "Azure", code: "#F0FFFF" },
+    { name: "Beige", code: "#F5F5DC" },
+    { name: "Bisque", code: "#FFE4C4" },
+    { name: "Black", code: "#000000" },
+    { name: "BlanchedAlmond", code: "#FFEBCD" },
+    { name: "Blue", code: "#0000FF" },
+    { name: "BlueViolet", code: "#8A2BE2" },
+    { name: "Brown", code: "#A52A2A" },
+    { name: "BurlyWood", code: "#DEB887" },
+    { name: "CadetBlue", code: "#5F9EA0" },
+    { name: "Chartreuse", code: "#7FFF00" },
+    { name: "Chocolate", code: "#D2691E" },
+    { name: "Coral", code: "#FF7F50" },
+    { name: "CornflowerBlue", code: "#6495ED" },
+    { name: "Cornsilk", code: "#FFF8DC" },
+    { name: "Crimson", code: "#DC143C" },
+    { name: "Cyan", code: "#00FFFF" },
+    { name: "DarkBlue", code: "#00008B" },
+    { name: "DarkCyan", code: "#008B8B" },
+    { name: "DarkGoldenRod", code: "#B8860B" },
+    { name: "DarkGray", code: "#A9A9A9" },
+    { name: "DarkGreen", code: "#006400" },
+    { name: "DarkKhaki", code: "#BDB76B" },
+    { name: "DarkMagenta", code: "#8B008B" },
+    { name: "DarkOliveGreen", code: "#556B2F" },
+    { name: "DarkOrange", code: "#FF8C00" },
+    { name: "DarkOrchid", code: "#9932CC" },
+    { name: "DarkRed", code: "#8B0000" },
+    { name: "DarkSalmon", code: "#E9967A" },
+    { name: "DarkSeaGreen", code: "#8FBC8F" },
+    { name: "DarkSlateBlue", code: "#483D8B" },
+    { name: "DarkSlateGray", code: "#2F4F4F" },
+    { name: "DarkTurquoise", code: "#00CED1" },
+    { name: "DarkViolet", code: "#9400D3" },
+    { name: "DeepPink", code: "#FF1493" },
+    { name: "DeepSkyBlue", code: "#00BFFF" },
+    { name: "DimGray", code: "#696969" },
+    { name: "DodgerBlue", code: "#1E90FF" },
+    { name: "FireBrick", code: "#B22222" },
+    { name: "FloralWhite", code: "#FFFAF0" },
+    { name: "ForestGreen", code: "#228B22" },
+    { name: "Fuchsia", code: "#FF00FF" },
+    { name: "Gainsboro", code: "#DCDCDC" },
+    { name: "GhostWhite", code: "#F8F8FF" },
+    { name: "Gold", code: "#FFD700" },
+    { name: "GoldenRod", code: "#DAA520" },
+    { name: "Gray", code: "#808080" },
+    { name: "Green", code: "#008000" },
+    { name: "GreenYellow", code: "#ADFF2F" },
+    { name: "HoneyDew", code: "#F0FFF0" },
+    { name: "HotPink", code: "#FF69B4" },
+    { name: "IndianRed", code: "#CD5C5C" },
+    { name: "Indigo", code: "#4B0082" },
+    { name: "Ivory", code: "#FFFFF0" },
+    { name: "Khaki", code: "#F0E68C" },
+    { name: "Lavender", code: "#E6E6FA" },
+    { name: "LavenderBlush", code: "#FFF0F5" },
+    { name: "LawnGreen", code: "#7CFC00" },
+    { name: "LemonChiffon", code: "#FFFACD" },
+    { name: "LightBlue", code: "#ADD8E6" },
+    { name: "LightCoral", code: "#F08080" },
+    { name: "LightCyan", code: "#E0FFFF" },
+    { name: "LightGoldenRodYellow", code: "#FAFAD2" },
+    { name: "LightGray", code: "#D3D3D3" },
+    { name: "LightGreen", code: "#90EE90" },
+    { name: "LightPink", code: "#FFB6C1" },
+    { name: "LightSalmon", code: "#FFA07A" },
+    { name: "LightSeaGreen", code: "#20B2AA" },
+    { name: "LightSkyBlue", code: "#87CEFA" },
+    { name: "LightSlateGray", code: "#778899" },
+    { name: "LightSteelBlue", code: "#B0C4DE" },
+    { name: "LightYellow", code: "#FFFFE0" },
+    { name: "Lime", code: "#00FF00" },
+    { name: "LimeGreen", code: "#32CD32" },
+    { name: "Linen", code: "#FAF0E6" },
+    { name: "Magenta", code: "#FF00FF" },
+    { name: "Maroon", code: "#800000" },
+    { name: "MediumAquaMarine", code: "#66CDAA" },
+    { name: "MediumBlue", code: "#0000CD" },
+    { name: "MediumOrchid", code: "#BA55D3" },
+    { name: "MediumPurple", code: "#9370DB" },
+    { name: "MediumSeaGreen", code: "#3CB371" },
+    { name: "MediumSlateBlue", code: "#7B68EE" },
+    { name: "MediumSpringGreen", code: "#00FA9A" },
+    { name: "MediumTurquoise", code: "#48D1CC" },
+    { name: "MediumVioletRed", code: "#C71585" },
+    { name: "MidnightBlue", code: "#191970" },
+    { name: "MintCream", code: "#F5FFFA" },
+    { name: "MistyRose", code: "#FFE4E1" },
+    { name: "Moccasin", code: "#FFE4B5" },
+    { name: "NavajoWhite", code: "#FFDEAD" },
+    { name: "Navy", code: "#000080" },
+  ];
+
+  const currentColor = editor?.getAttributes("textStyle").color || "black";
+
+  const applyColor = (color: string) => {
+    editor?.chain().focus().setColor(color).run();
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={cn(
+            "w-7 min-h-7 flex flex-col items-center justify-center rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100"
+          )}
+        >
+          {/* Icon */}
+          <ALargeSmall className="text-black size-4 " />
+
+          {/* Color line below the icon */}
+          <span
+            className="h-1 w-6 rounded-sm"
+            style={{ backgroundColor: currentColor }}
+          />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuPortal>
+        <DropdownMenuContent className="p-6 grid grid-cols-6 gap-3 bg-white shadow-2xl rounded-xl w-80 max-h-64 overflow-auto border border-gray-100">
+          {colors.map((color) => (
+            <DropdownMenuItem
+              key={color.name}
+              onClick={() => applyColor(color.code)}
+              className="flex items-center justify-center w-7 h-7 rounded-full border border-gray-200 cursor-pointer transform transition-all duration-300 ease-in-out hover:scale-110 hover:ring-2 hover:ring-offset-2 hover:ring-blue-500 hover:shadow-md"
+              style={{ backgroundColor: color.code }}
+              title={color.name}
+            />
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenuPortal>
+    </DropdownMenu>
+  );
+};
+
+/* ================ Heading Level Button ================== */
 const HeadingLevelButton = () => {
   const { editor } = useEditorStore();
 
@@ -81,10 +377,10 @@ const HeadingLevelButton = () => {
       <DropdownMenuPortal>
         <DropdownMenuContent className="p-1 flex flex-col gap-y-1 bg-white rounded-sm shadow-md">
           {headings.map(({ label, value, fontSize }) => (
-            <button
+            <DropdownMenuItem
               key={value}
               className={cn(
-                "flex items-center px-2 gap-x-2 rounded-sm  hover:bg-neutral-200/80",
+                "flex items-center px-2 gap-x-2 rounded-sm cursor-pointer  hover:bg-neutral-200/80",
                 editor?.getAttributes("textStyle").fontFamily === value &&
                   "bg-neutral-200/80"
               )}
@@ -103,7 +399,7 @@ const HeadingLevelButton = () => {
               }}
             >
               <span>{label}</span>
-            </button>
+            </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
       </DropdownMenuPortal>
@@ -154,7 +450,6 @@ const FontFamilyButton = () => {
           )}
         >
           <span className="truncate">
-            {/* add the current text style label */}
             {editor?.getAttributes("textStyle").fontFamily || "Arial"}
           </span>
           <ChevronDownIcon className="ml-2 size-4 shrink-0" />
@@ -163,10 +458,10 @@ const FontFamilyButton = () => {
       <DropdownMenuPortal>
         <DropdownMenuContent className="p-1 flex flex-col gap-y-1 bg-white shadow-md rounded-sm">
           {fonts.map(({ label, value }) => (
-            <button
+            <DropdownMenuItem
               key={value}
               className={cn(
-                "flex items-center px-2 gap-x-2 rounded-sm  hover:bg-neutral-200/80",
+                "flex items-center px-2 gap-x-2 rounded-sm  hover:bg-neutral-200/80 cursor-pointer",
                 editor?.getAttributes("textStyle").fontFamily === value &&
                   "bg-neutral-200/80"
               )}
@@ -174,7 +469,7 @@ const FontFamilyButton = () => {
               onClick={() => editor?.chain().focus().setFontFamily(value).run()}
             >
               <span>{label}</span>
-            </button>
+            </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
       </DropdownMenuPortal>
@@ -189,6 +484,7 @@ interface ToolbarButtonProps {
   isActive?: boolean | (() => boolean);
   isDisabled?: boolean | (() => boolean);
   tooltip?: string;
+  iconClass?: string;
 }
 
 /* ================ Enhanced Tooltip Button ================== */
@@ -198,6 +494,7 @@ const ToolbarButton = ({
   isActive = false,
   isDisabled = false,
   tooltip,
+  iconClass,
 }: ToolbarButtonProps) => {
   // Handle function-based props
   const active = typeof isActive === "function" ? isActive() : isActive;
@@ -217,7 +514,7 @@ const ToolbarButton = ({
       aria-label={tooltip}
       tabIndex={disabled ? -1 : 0}
     >
-      <Icon className="size-4" />
+      <Icon className={`size-4 ${iconClass}`} />
     </button>
   );
 
@@ -228,7 +525,9 @@ const ToolbarButton = ({
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger asChild>{button}</TooltipTrigger>
+        <TooltipTrigger asChild className={`size-4 ${iconClass}`}>
+          {button}
+        </TooltipTrigger>
         <TooltipContent
           className="bg-gray-800 text-white text-xs border-gray-700 shadow-lg px-2 py-1.5 rounded-md"
           style={{
@@ -255,9 +554,19 @@ const Toolbar = () => {
     isActive?: boolean | (() => boolean);
     isDisabled?: boolean | (() => boolean);
     tooltip?: string;
+    iconClass?: string;
   }[][] = [
     // section 1
     [
+      {
+        label: "Search Menus",
+        icon: SearchIcon,
+        onClick: () => {
+          console.log("Search the menus clicked!");
+        },
+        isActive: false,
+        tooltip: "Search the Menus (Alt+/)",
+      },
       {
         label: "Undo",
         icon: Undo2Icon,
@@ -318,6 +627,20 @@ const Toolbar = () => {
         isActive: () => editor?.isActive("underline") || false,
         tooltip: "Underline (Ctrl+U)",
       },
+      // {
+      //   label: "Text color",
+      //   icon: Baseline,
+      //   onClick: () => editor?.chain().focus().toggleUnderline().run(),
+      //   tooltip: "Underline (Ctrl+U)",
+      //   iconClass: "w-5 h-5 stroke-blue-500", // ✅ custom icon class
+      // },
+      // {
+      //   label: "Paint Bucket Icons",
+      //   icon: PaintBucketIcon,
+      //   onClick: () => editor?.chain().focus().toggleUnderline().run(),
+      //   tooltip: "Underline (Ctrl+U)",
+      //   iconClass: "w-5 h-5 text-red-500", // ✅ custom icon class
+      // },
     ],
     // section 3
     [
@@ -509,16 +832,28 @@ const Toolbar = () => {
   ];
 
   return (
-    <div className="bg-[#f1f4f9] px-2.5 py-0.5  border-[#C7C7C7] rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto mx-4">
+    <div
+      className="
+    w-full min-h-[40px]
+    bg-[#f1f4f9]
+    px-2.5 py-0.5
+    border-b border-[#C7C7C7]
+    flex items-center gap-x-1
+    overflow-x-auto
+    shadow-sm
+    rounded-full
+  "
+    >
       {sections[0].map((item) => (
         <ToolbarButton key={item.label} {...item} />
       ))}
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      {/* TODO: Font family */}
-      <FontFamilyButton />
-      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       {/* TODO: Heading */}
       <HeadingLevelButton />
+
+      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+      {/* TODO: Font family */}
+      <FontFamilyButton />
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       {/* TODO: Font size */}
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
@@ -526,6 +861,11 @@ const Toolbar = () => {
       {sections[1].map((item) => (
         <ToolbarButton key={item.label} {...item} />
       ))}
+
+      {/* Text color button */}
+      <TextColorButton />
+      {/* Highlight color button */}
+      <HighlightColorButton />
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       {/* TODO: Insert image , Insert link , Add Comment */}
       {sections[2].map((item) => (
