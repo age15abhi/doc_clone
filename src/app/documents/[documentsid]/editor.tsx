@@ -4,7 +4,7 @@ import React from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
-import { TextStyle, FontFamily, FontSize } from "@tiptap/extension-text-style";
+import { TextStyle, FontFamily, FontSize , Color , BackgroundColor  } from "@tiptap/extension-text-style";
 import Image from "@tiptap/extension-image";
 import { TableKit } from "@tiptap/extension-table";
 import ImageResize from "tiptap-extension-resize-image";
@@ -64,7 +64,9 @@ const EditorPage = () => {
       }),
       TextStyle,
       FontFamily,
-      FontSize
+      FontSize,
+      Color,
+      BackgroundColor,
     ],
      content: `
         <p>Adjusting font sizes can greatly affect the readability of your text, making it easier for users to engage with your content.</p>
