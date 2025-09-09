@@ -6,6 +6,8 @@ interface EditorStore {
   setEditor: (editor: Editor | null) => void;
 }
 
+
+// editor store
 export const useEditorStore = create<EditorStore>((set) => ({
   editor: null,
   setEditor: (editor) => set({ editor }),

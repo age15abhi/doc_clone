@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useEditorStore } from "@/store/use-editor-store";
 import { Level } from "@tiptap/extension-heading";
@@ -18,6 +18,17 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
 /* ================ Icons ================== */
 import {
   AlignLeftIcon,
@@ -40,8 +51,165 @@ import {
   Undo2Icon,
   PaintBucketIcon,
   ALargeSmall,
+  Link2Icon,
+  Image as ImageLogo,
+  Upload,
 } from "lucide-react";
 import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+/* ================ Image Button ================== */
+const ImageButton = () => {
+  const { editor } = useEditorStore();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+
+  /* 
+  here we create the on change method when we create the popover 
+  in popover we add a input that take the link and change the 
+  value of the link
+ */
+
+  const onApplyLink = (href: string) : void => {
+    editor?.chain().focus().setImage({ src: href }).run();
+    setImageUrl("");
+  };
+
+  const onUpload = () => {
+    const input = document.createElement("input");
+
+    console.log("input", input);
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+
+      if(file){
+        const imageUrl = URL.createObjectURL(file);
+        onApplyLink(imageUrl);
+      }
+    };
+
+    input.click()
+  };
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            className={cn(
+              "w-7 min-h-7 flex flex-col items-center justify-center rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100"
+            )}
+          >
+            {/* Icon */}
+            <ImageLogo className="text-black size-4 " />
+          </button>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuPortal>
+          <DropdownMenuContent className="bg-white shadow-2xl rounded-sm w-40 border border-gray-100 mt-3">
+            {/* upload from pc */}
+            <DropdownMenuItem onClick={onUpload}>
+              <Upload className="size-4 mr-2" />
+              Upload
+            </DropdownMenuItem>
+            {/* add the link address */}
+            <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
+              <Link2Icon className="size-4 mr-2" />
+              Add Url
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
+      </DropdownMenu>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add Image via URL</DialogTitle>
+            <DialogDescription>
+              Enter the URL of the image you want to insert.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Input
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="https://example.com/image.jpg"
+              className="w-full"
+              type="text"
+              autoFocus
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              disabled={!imageUrl}
+              onClick={() => {
+                onApplyLink(imageUrl);
+                setIsDialogOpen(false);
+              }}
+            >
+              Add Image
+            </Button>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};
+
+/* ================ Link Button ================== */
+const LinkButton = () => {
+  const { editor } = useEditorStore();
+  const [value, setValue] = useState("");
+
+  /* 
+  here we create the on change method when we create the popover 
+  in popover we add a input that take the link and change the 
+  value of the link
+ */
+
+  const onApplyLink = (href: string) => {
+    editor?.chain().focus().extendMarkRange("link").setLink({ href }).run();
+    setValue("");
+  };
+
+  return (
+    <DropdownMenu
+      onOpenChange={(open) => {
+        if (open) {
+          setValue(editor?.getAttributes("link").href || "");
+        }
+      }}
+    >
+      <DropdownMenuTrigger asChild>
+        <button
+          className={cn(
+            "w-7 min-h-7 flex flex-col items-center justify-center rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100"
+          )}
+        >
+          {/* Icon */}
+          <Link2Icon className="text-black size-4 " />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuPortal>
+        <DropdownMenuContent className="p-2.5 flex items-center gap-x-2 bg-white shadow-2xl rounded-xl">
+          <Input
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Paste link here"
+            value={value}
+          />
+          <Button onClick={() => onApplyLink(value)}>Apply</Button>
+        </DropdownMenuContent>
+      </DropdownMenuPortal>
+    </DropdownMenu>
+  );
+};
 
 /* ================ Text color Button ================== */
 const HighlightColorButton = () => {
@@ -647,7 +815,7 @@ const Toolbar = () => {
       {
         label: "Add Comment",
         icon: MessageSquareIcon,
-        onClick: () => alert("Add Comment clicked!"),
+        onClick: () => alert("Add comment clicked!"),
         isActive: false,
         tooltip: "Add Comment",
       },
@@ -871,6 +1039,10 @@ const Toolbar = () => {
       {sections[2].map((item) => (
         <ToolbarButton key={item.label} {...item} />
       ))}
+      {/* Link Button */}
+      <LinkButton />
+      {/* Image Button */}
+      <ImageButton />
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       {/* TODO: Text alignment and Text spacing */}
       {sections[3].map((item) => (
