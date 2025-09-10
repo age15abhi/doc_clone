@@ -17,6 +17,7 @@ import { TableKit } from "@tiptap/extension-table";
 import ImageResize from "tiptap-extension-resize-image";
 import { useEditorStore } from "@/store/use-editor-store";
 import Indent from "@/extensions/Intent";
+import TextAlign from "@tiptap/extension-text-align";
 
 const EditorPage = () => {
   const { setEditor } = useEditorStore();
@@ -65,7 +66,7 @@ const EditorPage = () => {
         table: { resizable: true },
       }),
       ImageResize.configure({
-        inline: true
+        inline: true,
       }),
       Image,
       Indent.configure({
@@ -80,6 +81,9 @@ const EditorPage = () => {
         openOnClick: false,
         autolink: true,
         defaultProtocol: "https",
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
       }),
     ],
     content: `

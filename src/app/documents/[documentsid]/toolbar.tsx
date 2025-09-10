@@ -54,10 +54,86 @@ import {
   Link2Icon,
   Image as ImageLogo,
   Upload,
+  AlignRightIcon,
+  AlignCenterIcon,
+  AlignJustifyIcon,
 } from "lucide-react";
 import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+/* ================ Align Button ================== */
+const AlignButton = () => {
+  const { editor } = useEditorStore();
+
+  const alignments = [
+    {
+      label: "Align Left",
+      value: "left",
+      icon: AlignLeftIcon,
+    },
+    {
+      label: "Align Center",
+      value: "center",
+      icon: AlignCenterIcon,
+    },
+    {
+      label: "Align Right",
+      value: "right",
+      icon: AlignRightIcon,
+    },
+    {
+      label: "Align Justify",
+      value: "justify",
+      icon: AlignJustifyIcon,
+    },
+  ];
+
+  const currentAlignment =
+    editor?.getAttributes("paragraph").textAlign ||
+    editor?.getAttributes("heading").textAlign ||
+    "left";
+
+  console.log("currentAlignment ==> ", currentAlignment);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={cn(
+            "h-7 min-w-7 px-1 py-2 flex  items-center justify-center content-center rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100"
+          )}
+        >
+          {/* Icon */}
+          <AlignLeftIcon className="text-black size-4 self-center" />
+
+          {/* Color line below the icon */}
+
+          <ChevronDownIcon className="size-3 ml-1" />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuPortal>
+        <DropdownMenuContent className="p-3 grid grid-cols-4 gap-4  shadow-2xl rounded-xl w-40 max-h-64 overflow-auto border border-gray-100  z-50 bg-gray-100">
+          {alignments.map((alignment) => (
+            <button
+              key={alignment.value}
+              onClick={() => editor?.chain().focus().setTextAlign(alignment.value).run()}
+              className={cn(
+                "h-7 min-w-7 px-1 py-2 flex items-center justify-center rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100",
+                currentAlignment === alignment.value &&
+                  "ring-2 ring-blue-500 bg-white"
+              )}
+              aria-label={alignment.label}
+            >
+              <alignment.icon />
+            </button>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenuPortal>
+    </DropdownMenu>
+  );
+};
 
 /* ================ Image Button ================== */
 const ImageButton = () => {
@@ -71,7 +147,7 @@ const ImageButton = () => {
   value of the link
  */
 
-  const onApplyLink = (href: string) : void => {
+  const onApplyLink = (href: string): void => {
     editor?.chain().focus().setImage({ src: href }).run();
     setImageUrl("");
   };
@@ -86,13 +162,13 @@ const ImageButton = () => {
     input.onchange = (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
 
-      if(file){
+      if (file) {
         const imageUrl = URL.createObjectURL(file);
         onApplyLink(imageUrl);
       }
     };
 
-    input.click()
+    input.click();
   };
 
   return (
@@ -822,13 +898,13 @@ const Toolbar = () => {
     ],
     // section 4
     [
-      {
-        label: "Align and Indent",
-        icon: AlignLeftIcon,
-        onClick: () => alert("Align and indent clicked!"),
-        isActive: false,
-        tooltip: "Align and Indent",
-      },
+      // {
+      //   label: "Align and Indent",
+      //   icon: AlignLeftIcon,
+      //   onClick: () => alert("Align and indent clicked!"),
+      //   isActive: false,
+      //   tooltip: "Align and Indent",
+      // },
       {
         label: "Line and Paragraph spacing",
         icon: AlignVerticalSpaceAround,
@@ -1044,6 +1120,8 @@ const Toolbar = () => {
       {/* Image Button */}
       <ImageButton />
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+      {/* Align Button */}
+      <AlignButton />
       {/* TODO: Text alignment and Text spacing */}
       {sections[3].map((item) => (
         <ToolbarButton key={item.label} {...item} />
