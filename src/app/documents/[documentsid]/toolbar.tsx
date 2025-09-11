@@ -54,10 +54,254 @@ import {
   Link2Icon,
   Image as ImageLogo,
   Upload,
+  AlignRightIcon,
+  AlignCenterIcon,
+  AlignJustifyIcon,
+  MinusIcon,
+  PlusIcon,
+  ListCollapseIcon,
 } from "lucide-react";
 import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+/* ============= Line Height Button ============== */
+const LineHeightButton = () => {
+  const { editor } = useEditorStore();
+
+ const lineHeights = [
+  {
+    label:"Default",
+    value: "normal"
+  },
+  {
+    label:"Single",
+    value: "1"
+  },
+  {
+    label:"1.15",
+    value: "1.15"
+  },
+  {
+    label:"1.5",
+    value: "1.5"
+  },
+  {
+    label:"Double",
+    value: "2"
+  },
+ ]
+
+   const currentLineHeight =
+    editor?.getAttributes("paragraph").textAlign ||
+    editor?.getAttributes("heading").textAlign ||
+    "left";
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={cn(
+            "h-7 min-w-7 px-1 py-2 flex   items-center justify-center content-center rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100"
+          )}
+        >
+          {/* Icon */}
+          <ListCollapseIcon className="size-4" />
+
+          {/* Color line below the icon */}
+
+          <ChevronDownIcon className="size-3 ml-1" />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuPortal>
+        <DropdownMenuContent className="p-3 grid  gap-4  shadow-2xl rounded-xl w-40 max-h-64 overflow-auto border border-gray-100  z-50 bg-gray-100">
+          {lineHeights.map(({label, value}) => (
+            <DropdownMenuItem
+              key={value}
+              onClick={() =>
+                editor?.chain().focus().setLineHeight(value).run()
+              }
+              className={cn(
+                "h-7 min-w-7 px-1 py-2 flex items-center justify-center rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100 cursor-pointer",
+                currentLineHeight === value &&
+                  "ring-2 ring-blue-500 bg-white "
+              )}
+              aria-label={label}
+            >
+              <span className="text-sm">{label}</span>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenuPortal>
+    </DropdownMenu>
+  );
+};
+
+/* ================ Font Size Button ================== */
+const FontSizeButton = () => {
+  const { editor } = useEditorStore();
+
+  const currentFontSize = editor?.getAttributes("textStyle").fontSize
+    ? editor?.getAttributes("textStyle").fontSize.replace("px", "")
+    : "16";
+
+  const [fontSize, setFontSize] = useState(currentFontSize);
+  const [inputValue, setInputValue] = useState(fontSize);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const updateFontSize = (newFontSize: string) => {
+    const size = parseInt(newFontSize);
+
+    if (!isNaN(size) && size > 0) {
+      // here change the font size in the editor
+      editor?.chain().setFontSize(`${size}px`).run();
+      // here this sen=t font size is for the change the value in the toolbar of the font size
+      setFontSize(newFontSize);
+      setInputValue(newFontSize);
+      setIsEditing(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleInputBlur = () => {
+    updateFontSize(inputValue);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "enter") {
+      e.preventDefault();
+      updateFontSize(inputValue);
+      editor?.commands.focus();
+    }
+  };
+
+  const increment = () => {
+    const newSize = parseInt(fontSize) + 1;
+
+    updateFontSize(newSize.toString());
+  };
+
+  const decrement = () => {
+    const newSize = parseInt(fontSize) - 1;
+
+    if (newSize > 0) {
+      updateFontSize(newSize.toString());
+    }
+  };
+  return (
+    <div className="flex items-center gap-x-0.5">
+      <button
+        onClick={decrement}
+        className="h-7 min-w-7 px-1 py-2 flex items-center justify-center rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100"
+      >
+        <MinusIcon className="size-4" />
+      </button>
+      {isEditing ? (
+        <Input
+        type="text"
+        onChange={handleInputChange}
+        onBlur={handleInputBlur}
+        value={inputValue}
+        onKeyDown={handleKeyDown}
+        className="h-7 w-11 text-sm text-center  border border-neutral-400 rounded-sm transition-colors bg-transparent focus:outline-none focus:ring-0 bg-gray-100"
+        />
+      ) : (
+        <button
+          onClick={() => {
+            setIsEditing(true);
+            setFontSize(currentFontSize);
+          }}
+          className="h-7 w-10 text-sm text-center  border border-neutral-400 rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100"
+        >
+          {currentFontSize}
+        </button>
+      )}
+      <button
+        onClick={increment}
+        className="h-7 min-w-7 px-1 py-2 flex items-center justify-center rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100"
+      >
+        <PlusIcon className="size-4" />
+      </button>
+    </div>
+  );
+};
+
+/* ================ Align Button ================== */
+const AlignButton = () => {
+  const { editor } = useEditorStore();
+
+  const alignments = [
+    {
+      label: "Align Left",
+      value: "left",
+      icon: AlignLeftIcon,
+    },
+    {
+      label: "Align Center",
+      value: "center",
+      icon: AlignCenterIcon,
+    },
+    {
+      label: "Align Right",
+      value: "right",
+      icon: AlignRightIcon,
+    },
+    {
+      label: "Align Justify",
+      value: "justify",
+      icon: AlignJustifyIcon,
+    },
+  ];
+
+  const currentAlignment =
+    editor?.getAttributes("paragraph").textAlign ||
+    editor?.getAttributes("heading").textAlign ||
+    "left";
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={cn(
+            "h-7 min-w-7 px-1 py-2 flex  items-center justify-center content-center rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100"
+          )}
+        >
+          {/* Icon */}
+          <AlignLeftIcon className="text-black size-4 self-center" />
+
+          {/* Color line below the icon */}
+
+          <ChevronDownIcon className="size-3 ml-1" />
+        </button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuPortal>
+        <DropdownMenuContent className="p-3 grid grid-cols-4 gap-4  shadow-2xl rounded-xl w-40 max-h-64 overflow-auto border border-gray-100  z-50 bg-gray-100">
+          {alignments.map((alignment) => (
+            <button
+              key={alignment.value}
+              onClick={() =>
+                editor?.chain().focus().setTextAlign(alignment.value).run()
+              }
+              className={cn(
+                "h-7 min-w-7 px-1 py-2 flex items-center justify-center rounded-sm transition-colors hover:bg-neutral-200/80 bg-gray-100",
+                currentAlignment === alignment.value &&
+                  "ring-2 ring-blue-500 bg-white"
+              )}
+              aria-label={alignment.label}
+            >
+              <alignment.icon />
+            </button>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenuPortal>
+    </DropdownMenu>
+  );
+};
 
 /* ================ Image Button ================== */
 const ImageButton = () => {
@@ -71,7 +315,7 @@ const ImageButton = () => {
   value of the link
  */
 
-  const onApplyLink = (href: string) : void => {
+  const onApplyLink = (href: string): void => {
     editor?.chain().focus().setImage({ src: href }).run();
     setImageUrl("");
   };
@@ -86,13 +330,13 @@ const ImageButton = () => {
     input.onchange = (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
 
-      if(file){
+      if (file) {
         const imageUrl = URL.createObjectURL(file);
         onApplyLink(imageUrl);
       }
     };
 
-    input.click()
+    input.click();
   };
 
   return (
@@ -822,13 +1066,13 @@ const Toolbar = () => {
     ],
     // section 4
     [
-      {
-        label: "Align and Indent",
-        icon: AlignLeftIcon,
-        onClick: () => alert("Align and indent clicked!"),
-        isActive: false,
-        tooltip: "Align and Indent",
-      },
+      // {
+      //   label: "Align and Indent",
+      //   icon: AlignLeftIcon,
+      //   onClick: () => alert("Align and indent clicked!"),
+      //   isActive: false,
+      //   tooltip: "Align and Indent",
+      // },
       {
         label: "Line and Paragraph spacing",
         icon: AlignVerticalSpaceAround,
@@ -1024,6 +1268,7 @@ const Toolbar = () => {
       <FontFamilyButton />
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       {/* TODO: Font size */}
+      <FontSizeButton />
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       {/* TODO: Text formatting */}
       {sections[1].map((item) => (
@@ -1044,6 +1289,9 @@ const Toolbar = () => {
       {/* Image Button */}
       <ImageButton />
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+      {/* Align Button */}
+      <AlignButton />
+      <LineHeightButton />
       {/* TODO: Text alignment and Text spacing */}
       {sections[3].map((item) => (
         <ToolbarButton key={item.label} {...item} />
