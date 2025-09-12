@@ -20,6 +20,9 @@ import Indent from "@/extensions/Intent";
 import TextAlign from "@tiptap/extension-text-align";
 import { FontSizeExtension } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-height";
+
+import { Ruler } from "./ruler";
+
 const EditorPage = () => {
   const { setEditor } = useEditorStore();
 
@@ -102,13 +105,16 @@ const EditorPage = () => {
     // Don't render immediately on the server to avoid SSR issues
     immediatelyRender: false,
   });
-  return (
-    <div className="size-full overflow-x-auto bg-[#F9FBFD] px-4 print:px-0 print:bg-white print:overflow-visible">
-      <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
-        <EditorContent editor={editor} />
-      </div>
+return (
+  <div className="size-full overflow-x-auto bg-[#F9FBFD] px-4 print:px-0 print:bg-white print:overflow-visible">
+    <Ruler />
+    {/* Editor content */}
+    <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
+      <EditorContent editor={editor} />
     </div>
-  );
+  </div>
+);
+
 };
 
 export default EditorPage;
