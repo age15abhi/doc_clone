@@ -37,9 +37,8 @@ export const Ruler = () => {
 */
 
   const handleMouseMove = (e: React.MouseEvent) => {
-
     const PAGE_WIDTH = 816;
-    const MINIMUM_SPACE = 100
+    const MINIMUM_SPACE = 100;
 
     if (isDraggingLeft || (isDraggingRight && rulerRef.current)) {
       const container = rulerRef.current?.querySelector("#ruler-container");
@@ -60,7 +59,7 @@ export const Ruler = () => {
             newRightPosition,
             maxRightPosition
           );
-          setRightMargin(constrainedRightPosition)
+          setRightMargin(constrainedRightPosition);
         }
       }
     }
@@ -68,19 +67,17 @@ export const Ruler = () => {
 
   // handle mouse up
   const handleMouseUp = () => {
-    setIsDraggingLeft(false)
-    setIsDraggingRight(false)
-  }
+    setIsDraggingLeft(false);
+    setIsDraggingRight(false);
+  };
 
   // handle mouse left double click
   const handleLeftDoubleClick = () => {
-    setLeftMargin(56)
-    
-  }
+    setLeftMargin(56);
+  };
   const handleRightDoubleClick = () => {
-    setRightMargin(56)
-    
-  }
+    setRightMargin(56);
+  };
 
   return (
     <div
@@ -88,12 +85,9 @@ export const Ruler = () => {
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
-      className="h-6 border-b border-gray-300  flex items-end relative select-none print:hidden"
+      className="w-[816px] mx-auto h-6 border-b border-gray-300  flex items-end relative select-none print:hidden"
     >
-      <div
-        id="ruler-container"
-        className="max-w-[816px] mx-auto w-full h-full relative"
-      >
+      <div id="ruler-container" className=" w-full h-full relative">
         <Marker
           position={leftMargin}
           isLeft={true}
@@ -172,18 +166,16 @@ const Marker = ({
       onDoubleClick={onDoubleClick}
     >
       <FaCaretDown className="absolute left-1/2 top-0 h-full fill-blue-500 transform -translate-x-1/2" />
-      <div className="absolute left-1/2 top-4 transform -translate-x-1/2"
-      style={{
-        height: "100vh",
-        width: "2px",
-        transform: "scaleX(0.5)",
-        backgroundColor: "#3b72f6",
-        display: isDragging ? "block" : "none",
-
-      }}
-      >
-
-      </div>
+      <div
+        className="absolute left-1/2 top-4 transform -translate-x-1/2"
+        style={{
+          height: "100vh",
+          width: "2px",
+          transform: "scaleX(0.5)",
+          backgroundColor: "#3b72f6",
+          display: isDragging ? "block" : "none",
+        }}
+      ></div>
     </div>
   );
 };
