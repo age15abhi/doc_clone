@@ -1,6 +1,7 @@
 import React from "react";
 import EditorPage from "./editor";
 import Toolbar from "./toolbar";
+import { Navbar } from "./navbar";
 
 interface DocumentsIdPageProps {
   params: Promise<{ documentsid: string }>;
@@ -14,20 +15,13 @@ async function DocumentsIdPage({ params }: DocumentsIdPageProps) {
 
   return (
     <div className="min-h-screen bg-[#FAFBFD]">
-      {/* ================ NAVBAR ================== */}
-      {/* <div className="fixed top-0 left-0 right-0 z-50">
-  Navbar come here
- </div> */}
-
-      {/* ================ TOOLBAR AND EDITOR ================== */}
-
-      <div className=" h-[48px]  flex items-center px-4 shadow-sm">
+      <div className="flex flex-col px-4 pt-2 gap-y-2 fixed top-0 left-0 z-10 bg-[#FAFBFD] print:hidden">
+        <Navbar />
         <Toolbar />
       </div>
-
-      <EditorPage />
-
-      {/* ====================================================== */}
+      <div className="pt-[114px] print:pt-0">
+        <EditorPage />
+      </div>
     </div>
   );
 }
