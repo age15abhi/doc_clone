@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 // Inter as the main sans font
 const inter = Inter({
@@ -28,10 +29,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${robotoMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${inter.variable} ${robotoMono.variable} antialiased`}>
+        <NuqsAdapter>{children}</NuqsAdapter>
       </body>
     </html>
   );
