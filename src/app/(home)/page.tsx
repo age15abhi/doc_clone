@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 
 import { Navbar } from "./navbar";
+import TemplateGallery from "./template-gallery";
 
 function Home() {
   return (
@@ -10,12 +11,7 @@ function Home() {
         <Navbar />
       </div>
       <div className="mt-16">
-        Click{" "}
-        <span className="text-blue-500 underline cursor-pointer ">
-          {" "}
-          <Link href={"/documents/123"}>here</Link>
-        </span>{" "}
-        to go to the specific link
+        <TemplateGallery />
       </div>
     </div>
   );
