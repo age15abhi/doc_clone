@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -10,10 +10,47 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { templates } from "@/constants/templates";
-
+import { useRouter } from "next/navigation";
+import { useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 const TemplateGallery = () => {
-  const isCreating = false;
+  /* =========== FLOW OF THE TEMPLATE CREATION ========
+    -> first when click on the template create the
+      document in the database with the empty title
+      and the empty initial content
+    
+    -> and when the document create the db it give the
+      document id 
+
+    -> Navigate the user to the /document/${documentId}
+
+    -> now the user on the editor page and now the user
+      can edit the title in the db
+
+    -> if user add or delete something then update the 
+      db dynamically convex is the live database
+
+    -> so now the user can add or edit the title and the
+      content of the db
+  */
+
+  const router = useRouter();
+  const create = useMutation(api.documents.create);
+
+  const [isCreating, setIsCreating] = useState(false);
+
+  const onTemplateClick = (title: string, initialContent: string) => {
+    setIsCreating(true);
+
+    create({ title, initialContent })
+      .then((documentId) => {
+        router.push(`/documents/${documentId}`);
+      })
+      .finally(() => {
+        setIsCreating(false);
+      });
+  };
 
   return (
     <div className="bg-[#F1F3F4]">
@@ -34,7 +71,8 @@ const TemplateGallery = () => {
                 >
                   <button
                     disabled={isCreating}
-                    onClick={() => {}}
+                    // add proper initial content
+                    onClick={() => onTemplateClick(template.label, "")}
                     style={{
                       backgroundImage: `url(${template.imageUrl})`,
                       backgroundSize: "cover",
