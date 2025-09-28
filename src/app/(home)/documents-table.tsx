@@ -4,9 +4,7 @@ import { LoaderIcon } from "lucide-react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
