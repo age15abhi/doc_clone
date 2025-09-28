@@ -3,17 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import DocumentInput from "./document-input";
-import { BsFilePdf, BsPersonAdd } from "react-icons/bs";
-import { MdAddToDrive } from "react-icons/md";
+import { BsFilePdf } from "react-icons/bs";
 
 import {
   Menubar,
-  MenubarCheckboxItem,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
-  MenubarRadioGroup,
-  MenubarRadioItem,
   MenubarSeparator,
   MenubarShortcut,
   MenubarSub,
@@ -22,20 +18,14 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import {
-  ArrowDownToLine,
   BoldIcon,
   FileIcon,
   FileJsonIcon,
   FilePenIcon,
   FilePlusIcon,
-  Files,
   FileTextIcon,
-  Folder,
-  FolderOutput,
   GlobeIcon,
   ItalicIcon,
-  Mail,
-  Pencil,
   PrinterIcon,
   Redo2Icon,
   RemoveFormattingIcon,
@@ -45,8 +35,9 @@ import {
   UnderlineIcon,
   Undo2Icon,
 } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+
 import { useEditorStore } from "@/store/use-editor-store";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 
 export const Navbar = () => {
   const { editor } = useEditorStore();
@@ -106,7 +97,7 @@ export const Navbar = () => {
     onDownload(blob, `document.txt`); // TODO: use the document name
   };
   return (
-    <nav className="flex items-center justify-between">
+    <nav className="flex items-center justify-between ">
       <div className="flex gap-2 items-center">
         <Link href="/">
           <Image src="/logo.svg" width={60} height={60} alt="LOGO" />
@@ -278,6 +269,15 @@ export const Navbar = () => {
             </Menubar>
           </div>
         </div>
+      </div>
+      <div className="flex gap-3 items-center pl-6">
+        <OrganizationSwitcher
+          afterCreateOrganizationUrl={"/"}
+          afterLeaveOrganizationUrl="/"
+          afterSelectPersonalUrl={"/"}
+          afterSelectOrganizationUrl={"/"}
+        />
+        <UserButton />
       </div>
     </nav>
   );
