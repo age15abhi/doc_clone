@@ -1,6 +1,5 @@
-import { Extension } from "@tiptap/react";
-import "@tiptap/extension-text-style";
-import { TextStyle } from "@tiptap/extension-text-style";
+import { Extension } from "@tiptap/core";
+
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
@@ -14,14 +13,12 @@ declare module "@tiptap/core" {
 export const FontSizeExtension = Extension.create({
   name: "fontSize",
 
-  // add options
   addOptions() {
     return {
-      types: [TextStyle],
+      types: ["textStyle"], // 
     };
   },
 
-  // add global attribute
   addGlobalAttributes() {
     return [
       {
@@ -29,15 +26,10 @@ export const FontSizeExtension = Extension.create({
         attributes: {
           fontSize: {
             default: null,
-            parseHTML: (element) => element.style.fontSize,
-            renderHTML: (attributes) => {
-              if (!attributes.fontSize) {
-                return {};
-              }
-
-              return {
-                style: `font-size: ${attributes.fontSize}`,
-              };
+            parseHTML: element => element.style.fontSize || null,
+            renderHTML: attributes => {
+              if (!attributes.fontSize) return {};
+              return { style: `font-size: ${attributes.fontSize}` };
             },
           },
         },
@@ -45,20 +37,19 @@ export const FontSizeExtension = Extension.create({
     ];
   },
 
-  // add commands
   addCommands() {
     return {
       setFontSize:
-        (fontSize: string) =>
+        fontSize =>
         ({ chain }) => {
-          return chain().setMark("text-size", { fontSize }).run();
+          return chain().setMark("textStyle", { fontSize }).run(); // ✅ fixed
         },
       unsetFontSize:
         () =>
         ({ chain }) => {
           return chain()
-            .setMark("text-size", { fontSize: null })
-            .unsetFontSize()
+            .setMark("textStyle", { fontSize: null }) // ✅ fixed
+            .removeEmptyTextStyle?.() // optional cleanup if available
             .run();
         },
     };
