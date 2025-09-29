@@ -320,7 +320,7 @@ body {
     --title-font-family: "Helvetica", sans-serif;
   }
 
-   /* Code and preformatted text styles */
+  /* Code and preformatted text styles */
   code {
     background-color: var(--purple-light);
     border-radius: 0.4rem;
@@ -339,7 +339,7 @@ body {
     }
   }
 
-   /* Heading styles */
+  /* Heading styles */
   h1,
   h2,
   h3,
@@ -373,5 +373,29 @@ body {
   h5,
   h6 {
     font-size: 1rem;
+  }
+}
+
+/* For mobile */
+.floating-threads {
+  display: none;
+}
+
+/* For desktop */
+.anchored-threads {
+  display: block;
+  max-width: 300px;
+  width: 100%;
+  position: absolute;
+  right: 12px;
+}
+
+@media (max-width: 640px) {
+  .floating-threads {
+    display: block;
+  }
+
+  .anchored-threads {
+    display: none;
   }
 }

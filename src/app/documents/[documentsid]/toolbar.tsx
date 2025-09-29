@@ -562,7 +562,7 @@ const HighlightColorButton = () => {
     editor?.getAttributes("textStyle").backgroundColor || "black";
 
   const applyColor = (color: string) => {
-    editor?.chain().focus().setBackgroundColor(color).run();
+    editor?.chain().focus().setHighlight({ color }).run();
   };
 
   return (
@@ -1059,8 +1059,8 @@ const Toolbar = () => {
       {
         label: "Add Comment",
         icon: MessageSquareIcon,
-        onClick: () => alert("Add comment clicked!"),
-        isActive: false,
+        onClick: () => editor?.chain().focus().addPendingComment().run(),
+        isActive: editor?.isActive("liveblocksCommentMark"),
         tooltip: "Add Comment",
       },
     ],

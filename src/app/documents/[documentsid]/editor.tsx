@@ -1,29 +1,36 @@
 "use client";
 
 import React from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, Extension } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
-import {
-  TextStyle,
-  FontFamily,
-  FontSize,
-  Color,
-  BackgroundColor,
-} from "@tiptap/extension-text-style";
+import { TextStyle } from "@tiptap/extension-text-style";
+import FontFamily from "@tiptap/extension-font-family";
+import Color from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
-import { TableKit } from "@tiptap/extension-table";
+import Table from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
 import ImageResize from "tiptap-extension-resize-image";
 import { useEditorStore } from "@/store/use-editor-store";
 import Indent from "@/extensions/Intent";
 import TextAlign from "@tiptap/extension-text-align";
 import { FontSizeExtension } from "@/extensions/font-size";
+import Underline from "@tiptap/extension-underline";
 import { LineHeightExtension } from "@/extensions/line-height";
+import {
+  useLiveblocksExtension,
+  FloatingToolbar,
+} from "@liveblocks/react-tiptap";
 
 import { Ruler } from "./ruler";
+import { Threads } from "./threads";
 
 const EditorPage = () => {
+  const liveblocks = useLiveblocksExtension();
   const { setEditor } = useEditorStore();
 
   const editor = useEditor({
@@ -61,19 +68,27 @@ const EditorPage = () => {
       },
     },
     extensions: [
+      liveblocks,
       StarterKit,
       LineHeightExtension.configure({
         types: ["heading", "paragraph"],
-        defaultLineHeight: "normal"
+        defaultLineHeight: "normal",
       }),
+      Underline,
+      Color,
+      Highlight.configure({
+        multicolor: true, // allows multiple background colors
+      }),
+      FontFamily,
       FontSizeExtension,
       TaskList,
       TaskItem.configure({
         nested: true,
       }),
-      TableKit.configure({
-        table: { resizable: true },
-      }),
+      Table,
+      TableRow,
+      TableCell,
+      TableHeader,
       ImageResize.configure({
         inline: true,
       }),
@@ -82,10 +97,6 @@ const EditorPage = () => {
         types: ["paragraph", "heading", "blockquote"],
       }),
       TextStyle,
-      FontFamily,
-      FontSize,
-      Color,
-      BackgroundColor,
       Link.configure({
         openOnClick: false,
         autolink: true,
@@ -95,26 +106,20 @@ const EditorPage = () => {
         types: ["heading", "paragraph"],
       }),
     ],
-    content: `
-        <p>Adjusting font sizes can greatly affect the readability of your text, making it easier for users to engage with your content.</p>
-        <p>When designing a website, it's crucial to balance large headings and smaller body text for a clean, organized layout.</p>
-        <p>When setting font sizes, it's important to consider accessibility, ensuring that text is readable for users with different visual impairments.</p>
-        <p><span style="font-size: 10px">Too small</span> a font size can strain the eyes, while <span style="font-size: 40px">too large</span> can disrupt the flow of the design.</p>
-        <p>When designing for mobile, font sizes should be adjusted to maintain readability on smaller screens.</p>
-      `,
     // Don't render immediately on the server to avoid SSR issues
     immediatelyRender: false,
   });
-return (
-  <div className="size-full overflow-x-auto bg-[#F9FBFD] px-4 print:px-0 print:bg-white print:overflow-visible">
-    <Ruler />
-    {/* Editor content */}
-    <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
-      <EditorContent editor={editor} />
+  return (
+    <div className="size-full overflow-x-auto bg-[#F9FBFD] px-4 print:px-0 print:bg-white print:overflow-visible">
+      <Ruler />
+      {/* Editor content */}
+      <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
+        <EditorContent editor={editor} />
+        <Threads editor={editor} />
+        {/* <FloatingToolbar editor={editor} /> */}
+      </div>
     </div>
-  </div>
-);
-
+  );
 };
 
 export default EditorPage;
