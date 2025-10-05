@@ -4,6 +4,7 @@ import { ClientSideSuspense } from "@liveblocks/react";
 // there are the hooks
 import { useOthers, useSelf } from "@liveblocks/react/suspense";
 import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 
 const AVATAR_SIZE = 36;
 
@@ -65,7 +66,7 @@ const Avatar = ({ src, name }: AvatarProps) => {
         {name}
       </div>
 
-      <img src={src} alt={name} className="size-full rounded-full" />
+      <Image src={src} alt={name} className="size-full rounded-full" />
     </div>
   );
 };

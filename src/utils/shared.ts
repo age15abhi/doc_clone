@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function noop(): void {}
 
 /**
@@ -21,6 +22,7 @@ export function readFileDataUrl(file: File): Promise<any> {
   const reader = new FileReader();
 
   return new Promise((resolve, reject) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     reader.onload = readerEvent => resolve(readerEvent.target.result);
     reader.onerror = reject;
@@ -32,6 +34,7 @@ export function readFileDataUrl(file: File): Promise<any> {
 /**
  * Create a cached version of a pure function.
  */
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export function cached(fn: Function): Function {
   const cache = Object.create(null);
 

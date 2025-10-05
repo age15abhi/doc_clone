@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Doc } from "../../../convex/_generated/dataModel";
 import { SiGoogledocs } from "react-icons/si";
-import { Building2Icon, CircleUserIcon, MoreVertical } from "lucide-react";
+import { Building2Icon, CircleUserIcon} from "lucide-react";
 import { format } from "date-fns";
 // import { Button } from "@/components/ui/button";
 // import { Dropdown } from "react-day-picker";
