@@ -15,18 +15,17 @@ async function DocumentsIdPage({ params }: DocumentsIdPageProps) {
   console.log("documentId", documentId);
 
   return (
-    <div className="min-h-screen bg-[#FAFBFD]">
-      <div className="flex  flex-col px-4 pt-2 gap-y-2 fixed top-0 left-0 z-10 bg-[#FAFBFD] print:hidden w-full">
-        <Navbar />
-        <Toolbar />
+    <Room id={documentId}>
+      <div className="min-h-screen bg-[#FAFBFD]">
+        <div className="flex  flex-col px-4 pt-2 gap-y-2 fixed top-0 left-0 z-10 bg-[#FAFBFD] print:hidden w-full">
+          <Navbar />
+          <Toolbar />
+        </div>
+        <div className="pt-[114px] print:pt-0">
+          <EditorPage />
+        </div>
       </div>
-      <div className="pt-[114px] print:pt-0">
-        <Room id={documentId}>
-
-        <EditorPage />
-        </Room>
-      </div>
-    </div>
+    </Room>
   );
 }
 
