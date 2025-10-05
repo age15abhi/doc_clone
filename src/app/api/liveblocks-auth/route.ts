@@ -11,13 +11,18 @@ const liveblocks = new Liveblocks({
 
 // create the post request
 export async function POST(req: Request) {
-  const { sessionClaims } = await auth();
+  const { sessionClaims, orgId } = await auth();
+
+
+  console.log("orgId ===> ", orgId);
 
   if (!sessionClaims) {
     return new Response("Unauthorized", { status: 401 });
   }
 
   const user = await currentUser();
+
+  console.log("user ===> ", user);
 
   if (!user) {
     return new Response("Unauthorized", { status: 401 });
@@ -36,7 +41,9 @@ export async function POST(req: Request) {
 
   // if the document is present then check for the is the user is the document owner
   const isOwner = document.ownerId === user.id;
-  const isOrganizationMember = !!(document.organizationId && document.organizationId === sessionClaims.org_id);
+  const isOrganizationMember = !!(
+    document.organizationId && document.organizationId === orgId
+  );
 
   if (!isOwner && !isOrganizationMember) {
     return new Response("Unauthorized", { status: 401 });
@@ -45,14 +52,17 @@ export async function POST(req: Request) {
   // create the liveblocks session
   const session = liveblocks.prepareSession(user.id, {
     userInfo: {
-      name: user.firstName ?? "Anonymous",
+      name:
+        user.firstName ?? user.primaryEmailAddress?.emailAddress ?? "Anonymous",
       avatar: user.imageUrl,
     },
   });
 
-  session.allow(room, session.FULL_ACCESS)
+  session.allow(room, session.FULL_ACCESS);
 
-  const {body , status} = await session.authorize()
+  const { body, status } = await session.authorize();
 
-  return new Response(body, {status})
+  console.log("body ===> ", body, "status ===> ", status);
+
+  return new Response(body, { status });
 }

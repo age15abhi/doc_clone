@@ -12,7 +12,7 @@ const ErrorPage = ({
   reset: () => void;
 }) => {
   return (
-    <div className="min-h-screen flex flex-col justify-center space-y-6">
+    <div className="min-h-screen flex flex-col justify-center content-center space-y-6">
       <div className="text-center space-y-4">
         <div className="flex justify-center">
           <div className="bg-rose-100 p-3 rounded-full">
@@ -26,7 +26,7 @@ const ErrorPage = ({
           <p>{error.message}</p>
         </div>
       </div>
-      <div className="flex items-center gap-x-3">
+      <div className="flex justify-center  items-center gap-x-3 ">
         <Button onClick={reset} className="font-medium px-6">
           Try again
         </Button>
