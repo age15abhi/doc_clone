@@ -12,3 +12,15 @@ export const useEditorStore = create<EditorStore>((set) => ({
   editor: null,
   setEditor: (editor) => set({ editor }),
 }));
+
+
+// link popup store
+interface LinkPopupState {
+  isOpen: boolean;
+  setOpen: (open: boolean) => void;
+}
+
+export const useLinkPopupStore = create<LinkPopupState>((set) => ({
+  isOpen: false,
+  setOpen: (open) => set({ isOpen: open }),
+}));
